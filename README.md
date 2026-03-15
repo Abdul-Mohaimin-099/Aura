@@ -71,6 +71,7 @@ Router (Groq llama-3.1-8b-instant)
 - **RAG with FAISS + HuggingFace embeddings** for local PDF knowledge.
 - **Web grounding** with Gemini search tools.
 - **Vision/OCR pipeline** for image understanding.
+- **LangSmith tracing support** for end-to-end chain/graph observability.
 - **Session history** in sidebar with quick restore.
 - **Source display**:
   - inline icon links for URL/web sources
@@ -103,6 +104,7 @@ Router (Groq llama-3.1-8b-instant)
   - `gemini-2.5-flash` / fallback lite (vision paths)
 - **Embeddings**: `all-MiniLM-L6-v2`
 - **Vector store**: FAISS
+- **Observability**: LangSmith tracing (optional via environment variables)
 
 ---
 
@@ -199,6 +201,25 @@ LANGCHAIN_PROJECT=Aura
 ```
 
 If tracing is enabled, also set `LANGCHAIN_API_KEY`.
+
+### LangSmith Traceability
+
+Aura can be traced in LangSmith for debugging and observability.
+
+Enable these in `.env`:
+
+```env
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_API_KEY=your_langsmith_key
+LANGCHAIN_PROJECT=Aura
+```
+
+What you can observe in LangSmith:
+
+- Router decisions and fallback behavior
+- Chain/LLM latency and token usage
+- Prompt/response spans for debugging
+- End-to-end execution paths across the app
 
 ---
 
