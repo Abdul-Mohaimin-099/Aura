@@ -55,7 +55,11 @@ def classify(query: str, has_vectorstore: bool, has_ocr: bool = False) -> Intent
                 SystemMessage(content=_SYSTEM_PROMPT),
                 HumanMessage(content=f"[Context: {context}]\n\nUser query: {query}"),
             ],
-            config={"callbacks": config.get_tracer(), "tags": ["router"]},
+            config=config.get_trace_config(
+                run_name="router.classify.invoke",
+                tags=["router", "classify", "invoke"],
+                metadata={"module": "router"},
+            ),
         )
         label = response.content.strip().upper()
         if label in Intent.__members__:

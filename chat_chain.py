@@ -65,7 +65,11 @@ def handle(query: str, chat_history: list) -> str:
         chain = prompt | llm | StrOutputParser()
         return chain.invoke(
             {"chat_history": trimmed_history, "query": query},
-            config={"callbacks": config.get_tracer(), "tags": ["general"]},
+            config=config.get_trace_config(
+                run_name="chat.general.invoke",
+                tags=["chat", "general", "invoke"],
+                metadata={"module": "chat_chain"},
+            ),
         )
     except Exception as exc:
         return f"❌ Error: {exc}"
@@ -93,6 +97,13 @@ def stream(query: str, chat_history: list):
             streaming=True,
         )
         chain = prompt | llm | StrOutputParser()
-        yield from chain.stream({"chat_history": trimmed_history, "query": query})
+        yield from chain.stream(
+            {"chat_history": trimmed_history, "query": query},
+            config=config.get_trace_config(
+                run_name="chat.general.stream",
+                tags=["chat", "general", "stream"],
+                metadata={"module": "chat_chain"},
+            ),
+        )
     except Exception as exc:
         yield f"❌ Error: {exc}"

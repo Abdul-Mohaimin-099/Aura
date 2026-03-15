@@ -119,7 +119,11 @@ def code_review_node(state: GraphState) -> dict[str, Any]:
         chunks: list[str] = []
         for chunk in llm.stream(
             messages,
-            config={"callbacks": config.get_tracer(), "tags": ["code-review"]},
+            config=config.get_trace_config(
+                run_name="graph.code_review.stream",
+                tags=["graph", "code-review", "stream"],
+                metadata={"module": "graph", "node": "code_review_node"},
+            ),
         ):
             token = chunk.content if hasattr(chunk, "content") else str(chunk)
             if not token:

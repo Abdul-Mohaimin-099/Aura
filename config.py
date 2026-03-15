@@ -6,6 +6,7 @@ Loads .env, exposes typed constants for models, keys, and tracing.
 from __future__ import annotations
 
 import os
+from typing import Any
 from dotenv import load_dotenv
 from langchain_core.callbacks import BaseCallbackHandler
 
@@ -57,3 +58,22 @@ def get_tracer() -> list[BaseCallbackHandler]:
         return [LangChainTracer(project_name=LANGSMITH_PROJECT)]
     except Exception:
         return []
+
+
+def get_trace_config(
+    run_name: str,
+    tags: list[str] | None = None,
+    metadata: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Build a consistent LangSmith trace config for all invoke/stream calls."""
+    trace_tags = ["aura", *(tags or [])]
+    trace_metadata: dict[str, Any] = {"project": LANGSMITH_PROJECT}
+    if metadata:
+        trace_metadata.update(metadata)
+
+    return {
+        "callbacks": get_tracer(),
+        "run_name": run_name,
+        "tags": trace_tags,
+        "metadata": trace_metadata,
+    }

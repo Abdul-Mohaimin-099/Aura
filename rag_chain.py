@@ -35,7 +35,11 @@ def handle(
     try:
         docs = retriever.invoke(
             query,
-            config={"callbacks": config.get_tracer(), "tags": ["rag-retrieval"]},
+            config=config.get_trace_config(
+                run_name="rag.retrieval.invoke",
+                tags=["rag", "retrieval", "invoke"],
+                metadata={"module": "rag_chain"},
+            ),
         )
 
         # De-duplicate using parent content, cap total context size
@@ -92,7 +96,11 @@ def handle(
                 "chat_history": trimmed_history,
                 "query": query,
             },
-            config={"callbacks": config.get_tracer(), "tags": ["rag-generation"]},
+            config=config.get_trace_config(
+                run_name="rag.generation.invoke",
+                tags=["rag", "generation", "invoke"],
+                metadata={"module": "rag_chain"},
+            ),
         )
         return answer, sources
 
@@ -111,7 +119,14 @@ def stream(
     The generator yields text chunks; sources are resolved before streaming starts.
     """
     try:
-        docs = retriever.invoke(query)
+        docs = retriever.invoke(
+            query,
+            config=config.get_trace_config(
+                run_name="rag.retrieval.stream",
+                tags=["rag", "retrieval", "stream"],
+                metadata={"module": "rag_chain"},
+            ),
+        )
 
         seen: set[str] = set()
         context_parts: list[str] = []
@@ -166,7 +181,12 @@ def stream(
                     "context": context_text,
                     "chat_history": trimmed_history,
                     "query": query,
-                }
+                },
+                config=config.get_trace_config(
+                    run_name="rag.generation.stream",
+                    tags=["rag", "generation", "stream"],
+                    metadata={"module": "rag_chain"},
+                ),
             )
 
         return _gen(), sources
