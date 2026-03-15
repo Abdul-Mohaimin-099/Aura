@@ -1,0 +1,16 @@
+streamlit
+langchain
+langchain-google-genai
+langchain-groq
+langchain-community
+langchain-huggingface
+langchain-text-splitters
+sentence-transformers
+faiss-cpu
+pymupdf4llm
+python-dotenv
+google-generativeai
+google-genai
+groq
+Pillow
+langgraph
