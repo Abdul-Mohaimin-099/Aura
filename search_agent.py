@@ -81,9 +81,10 @@ def handle(query: str, chat_history: list[dict]) -> tuple[str, list[str]]:
       - If all retries fail with 429, fall back to Gemini 2.5 Flash Lite.
       - Non-quota errors are returned immediately without retrying.
     """
-    # Build typed Content list — keep last 6 messages (3 turns)
+    # Build typed Content list — keep last N messages from configured turns
     contents: list[types.Content] = []
-    for m in chat_history[-6:]:
+    window = config.MAX_HISTORY_TURNS * 2
+    for m in chat_history[-window:]:
         role = "user" if m["role"] == "user" else "model"
         contents.append(types.Content(role=role, parts=[types.Part(text=m["text"])]))
     contents.append(types.Content(role="user", parts=[types.Part(text=query)]))

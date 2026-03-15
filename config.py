@@ -40,7 +40,7 @@ CHILD_CHUNK_OVERLAP: int = 80
 
 # ── Token / context limits ──────────────────────────────────
 MAX_CONTEXT_CHARS: int = 6000  # hard cap on total RAG context string
-MAX_HISTORY_TURNS: int = 3  # number of user/assistant pairs to keep
+MAX_HISTORY_TURNS: int = 2  # number of user/assistant pairs to keep in context
 MAX_OUTPUT_TOKENS: int = 1024  # cap LLM output tokens
 
 # ── LangSmith ────────────────────────────────────────────────

@@ -13,6 +13,7 @@ import ingestion
 import vision_service
 import ui_helpers
 import sidebar
+import config
 
 
 _URL_PREFIXES = ("http://", "https://")
@@ -61,9 +62,10 @@ def _migrate_legacy_state() -> None:
 
 
 def _lc_history(messages: list[dict]) -> list:
-    """Convert stored message dicts → LangChain message objects."""
+    """Convert stored messages to LangChain format, pruned to context window."""
+    window = config.MAX_HISTORY_TURNS * 2
     out = []
-    for m in messages:
+    for m in messages[-window:]:
         if m["role"] == "user":
             out.append(HumanMessage(content=m["content"]))
         else:
@@ -72,10 +74,11 @@ def _lc_history(messages: list[dict]) -> list:
 
 
 def _search_history(messages: list[dict]) -> list[dict]:
-    """Convert stored messages → search_agent (Gemini API) format."""
+    """Convert stored messages to Gemini format, pruned to context window."""
+    window = config.MAX_HISTORY_TURNS * 2
     return [
         {"role": "user" if m["role"] == "user" else "model", "text": m["content"]}
-        for m in messages
+        for m in messages[-window:]
     ]
 
 

@@ -71,6 +71,9 @@ Router (Groq llama-3.1-8b-instant)
 - **RAG with FAISS + HuggingFace embeddings** for local PDF knowledge.
 - **Web grounding** with Gemini search tools.
 - **Vision/OCR pipeline** for image understanding.
+- **Class-aware coding mentor** that adapts explanation depth by student class.
+- **Joyful teaching style** with short storytelling analogies when helpful.
+- **Context pruning** to the last 2 user-assistant turns for stable responses.
 - **LangSmith tracing support** for end-to-end chain/graph observability.
 - **Session history** in sidebar with quick restore.
 - **Source display**:
@@ -240,7 +243,8 @@ Open the local URL shown in terminal (typically `http://localhost:8501`).
 ### A) General chat
 
 - Ask any non-document, non-image, non-live query.
-- Example: `Teach me loops like I am in class 5.`
+- For programming help, include class level for best results.
+- Example: `I am in class 5. Teach me loops with a fun story.`
 
 ### B) Web search mode
 
